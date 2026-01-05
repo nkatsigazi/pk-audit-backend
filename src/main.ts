@@ -5,6 +5,11 @@ import { IoAdapter } from '@nestjs/platform-socket.io';
 import helmet from 'helmet';
 
 async function bootstrap() {
+  
+  console.log('--- DEBUG START ---');
+  console.log('DATABASE_URL is:', process.env.DATABASE_URL);
+  console.log('--- DEBUG END ---');
+  
   const app = await NestFactory.create(AppModule);
   app.useWebSocketAdapter(new IoAdapter(app));
 
@@ -21,6 +26,5 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   await app.listen(port);
 
-  console.log('DATABASE_URL:', process.env.DATABASE_URL);
 }
 bootstrap();
