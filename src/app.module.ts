@@ -22,14 +22,12 @@ import { SocketModule } from './socket/socket.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'norman044',
-      database: 'pk_audit_db',
+      url: process.env.DATABASE_URL,
       autoLoadEntities: true,
       synchronize: true,
-      logging: true, // For audit trails
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
     EngagementsModule,
     ChecklistModule,
