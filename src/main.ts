@@ -5,21 +5,20 @@ import { IoAdapter } from '@nestjs/platform-socket.io';
 import helmet from 'helmet';
 
 async function bootstrap() {
-  
-  console.log('--- DEBUG START ---');
-  console.log('DATABASE_URL is:', process.env.DATABASE_URL);
-  console.log('--- DEBUG END ---');
-  
+
   const app = await NestFactory.create(AppModule);
   app.useWebSocketAdapter(new IoAdapter(app));
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:3000'], // Add client portal origins
+    origin: ['http://localhost:5173', 'http://localhost:3000', 'https://pk-audit-frontend.onrender.com'], // Add client portal origins
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: false, // Disable CSP in dev to allow socket.io/blobs
+    crossOriginEmbedderPolicy: false,
+  }));
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
